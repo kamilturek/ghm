@@ -10,9 +10,10 @@ def cli():
 
 
 @cli.command(name="list")
-def list_():
+@click.option("-p", "--repository-path")
+def list_(repository_path):
     hooks_manager = HooksManager(fs=OSFileSystem())
-    for hook in hooks_manager.list_hooks(repository_path="sample/"):
+    for hook in hooks_manager.list_hooks(repository_path):
         click.echo(hook)
 
 
