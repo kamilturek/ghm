@@ -1,32 +1,25 @@
-import argparse
+import click
 
-from ghm import hooks
-
-
-def list_hooks():
-    hooks.list_hooks()
+from ghm.fs import OSFileSystem
+from ghm.hooks import HooksManager
 
 
-def add_hook():
+@click.group()
+def cli():
     pass
 
 
-def run():
-    parser = argparse.ArgumentParser(
-        prog="ghm",
-        description="lightweight git hooks manager",
-    )
-    subparsers = parser.add_subparsers()
+@cli.command(name="list")
+def list_():
+    hooks_manager = HooksManager(fs=OSFileSystem())
+    for hook in hooks_manager.list_hooks(repository_path="sample/"):
+        click.echo(hook)
 
-    parser_list = subparsers.add_parser("list")
-    parser_list.set_defaults(func=list_hooks)
 
-    parser_add = subparsers.add_parser("add")
-    parser_add.set_defaults(func=add_hook)
-
-    args = parser.parse_args()
-    args.func()
+@cli.command()
+def add():
+    pass
 
 
 if __name__ == "__main__":
-    run()
+    cli()
